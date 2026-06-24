@@ -2,11 +2,11 @@
   "compilerOptions": {
     "target": "es2022",
     "module": "commonjs",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
+    "rootDir": "./electron",
     "outDir": "./electron/dist",
     "strict": true,
-    "skipLibCheck": true,
-    "types": ["node"]
+    "skipLibCheck": true
   },
   "include": ["electron/**/*.ts"]
 }
