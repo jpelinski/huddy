@@ -21,6 +21,7 @@ function createWindow() {
 
     if (!app.isPackaged) {
         win.loadURL("http://localhost:5173");
+
     } else {
         win.loadFile(path.join(__dirname, "../dist/index.html"));
     }

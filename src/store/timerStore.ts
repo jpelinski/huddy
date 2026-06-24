@@ -4,7 +4,7 @@ import type { Timer, Preset } from '../types/timer';
 interface TimerStore {
     timers: Timer[];
     presets: Preset[];
-    addTimer: (preset: Preset) => void; //Timer from preset
+    addTimer: (preset: Omit<Preset, 'id'>) => void; //Timer from preset
     removeTimer: (id: string) => void;
     toggleTimer: (id: string) => void;
     resetTimer: (id: string) => void;
