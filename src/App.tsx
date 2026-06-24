@@ -1,11 +1,12 @@
 import { TimerDisplay } from "./components/TimerDisplay";
 import { useTimerStore } from "./store/timerStore";
+import styles from "./App.module.css";
 
 function App() {
   const { addTimer, toggleTimer, timers } = useTimerStore();
 
   return (
-    <div>
+    <div className={styles.container}>
       <button onClick={() => addTimer({ name: "New Timer", duration: 10 })}>
         Add Timer
       </button>

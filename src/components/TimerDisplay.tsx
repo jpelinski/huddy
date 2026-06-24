@@ -1,6 +1,7 @@
 import { useTimer } from "../hooks/useTimer";
 import { useTimerStore } from "../store/timerStore";
 import { formatTime } from "../utils/formatTime";
+import styles from "./TimerDisplay.module.css";
 
 interface Props {
   timerId: string;
@@ -12,8 +13,8 @@ export function TimerDisplay({ timerId }: Props) {
   if (!timer) return null;
 
   return (
-    <div>
-      <h2>{timer.name}</h2>
+    <div className={`${styles.timer} ${timer.isFinished ? styles.finished : ""}`}>
+      <p>{timer.name}</p>
       <p>{formatTime(timer.remainingTime)}</p>
       <p>
         Status: {timer.isRunning ? "Running" : timer.isFinished ? "Finished" : "Paused"}

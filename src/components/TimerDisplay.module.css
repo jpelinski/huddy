@@ -1,0 +1,32 @@
+.timer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+.timer {
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.05rem;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+}
+.label {
+  font-size: 0.3rem;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  letter-spacing: 0.05rem;
+}
+.finished .time {
+  animation: blink 1s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    background: var(--bgc);
+  }
+  50% {
+    background: var(--danger);
+  }
+}
