@@ -4,9 +4,11 @@
   "version": "0.0.0",
   "main": "electron/dist/main.js",
   "scripts": {
-  "dev": "concurrently \"vite\" \"wait-on http://localhost:5173 && cross-env NODE_ENV=development electron .\"",
-  "build": "vite build && electron-builder",
-  "preview": "vite preview"
+    "build:electron": "tsc -p tsconfig.electron.json",
+    "dev:electron": "concurrently \"vite\" \"wait-on http://localhost:5173 && cross-env NODE_ENV=development electron .\"",
+    "dev": "npm run build:electron && npm run dev:electron",
+    "build": "vite build && electron-builder",
+    "preview": "vite preview"
   },
   "dependencies": {
     "electron-store": "^11.0.2",
@@ -33,11 +35,15 @@
     "vite": "^8.1.0",
     "wait-on": "^9.0.10"
   },
-
-"build": {
-  "appId": "dev.qba.huddy",
-  "productName": "Huddy",
-  "files": ["dist/**/*", "electron/**/*"],
-  "win": { "target": "nsis" }
-}
+  "build": {
+    "appId": "dev.qba.huddy",
+    "productName": "Huddy",
+    "files": [
+      "dist/**/*",
+      "electron/**/*"
+    ],
+    "win": {
+      "target": "nsis"
+    }
+  }
 }

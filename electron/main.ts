@@ -1,10 +1,10 @@
 import { app, BrowserWindow, ipcMain } from "electron";
 import path from "path";
 
-const isDev = !app.isPackaged;
+let win: BrowserWindow | null = null;
 
 function createWindow() {
-    const mainWindow = new BrowserWindow({
+    win = new BrowserWindow({
         width: 200,
         height: 100,
         frame: false,
@@ -19,10 +19,10 @@ function createWindow() {
         },
     });
 
-    if (isDev) {
-        mainWindow.loadURL("http://localhost:5173");
+    if (!app.isPackaged) {
+        win.loadURL("http://localhost:5173");
     } else {
-        mainWindow.loadFile(path.join(__dirname, "../dist/index.html"));
+        win.loadFile(path.join(__dirname, "../dist/index.html"));
     }
 }
 
@@ -33,5 +33,21 @@ app.whenReady().then(() => {
 app.on("window-all-closed", () => {
     if (process.platform !== "darwin") {
         app.quit();
+    }
+});
+
+ipcMain.on('window-drag', (_event, delta: { x: number, y: number }) => {
+    if (!win) return
+    const [x, y] = win.getPosition()
+    win.setPosition(x + delta.x, y + delta.y)
+});
+ipcMain.handle('window-close', () => {
+    if (win) {
+        win.close();
+    }
+});
+ipcMain.handle('window-minimize', () => {
+    if (win) {
+        win.minimize();
     }
 });
