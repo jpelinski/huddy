@@ -5,23 +5,28 @@ let win: BrowserWindow | null = null;
 
 function createWindow() {
     win = new BrowserWindow({
-        width: 400,
-        height: 300,
+        width: 300,
+        height: 200,
         frame: false,
         transparent: true,
         alwaysOnTop: true,
         resizable: true,
         skipTaskbar: false,
+        ...(process.platform === 'darwin' && {
+            vibrancy: 'hud',
+            visualEffectState: 'active',
+        }),
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),
             contextIsolation: true,
             nodeIntegration: false,
         },
     });
+    win.on('resize', () => win?.webContents.invalidate())
 
     if (!app.isPackaged) {
         win.loadURL("http://localhost:5173");
-
+        // win.webContents.openDevTools()
     } else {
         win.loadFile(path.join(__dirname, "../dist/index.html"));
     }
@@ -52,3 +57,9 @@ ipcMain.handle('window-minimize', () => {
         win.minimize();
     }
 });
+
+ipcMain.on('set-height', (_event, height: number) => {
+    if (!win) return
+    const [width] = win.getSize()
+    win.setSize(width, height)
+})

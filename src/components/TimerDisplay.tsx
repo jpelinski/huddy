@@ -14,11 +14,8 @@ export function TimerDisplay({ timerId }: Props) {
 
   return (
     <div className={`${styles.timer} ${timer.isFinished ? styles.finished : ""}`}>
-      <p>{timer.name}</p>
-      <p>{formatTime(timer.remainingTime)}</p>
-      <p>
-        Status: {timer.isRunning ? "Running" : timer.isFinished ? "Finished" : "Paused"}
-      </p>
+      <span className={styles.time}>{formatTime(timer.remainingTime)}</span>
+      <span className={styles.label}>{timer.name}</span>
     </div>
   );
 }
