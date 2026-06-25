@@ -3,6 +3,7 @@ import { useCallback } from "react";
 export function useDrag() {
     const onMouseDown = useCallback((e: React.MouseEvent) => {
         if (e.button !== 0) return;
+        if ((e.target as HTMLElement).closest("button")) return;
 
         let lastX = e.screenX
         let lastY = e.screenY

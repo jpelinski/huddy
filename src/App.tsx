@@ -1,4 +1,5 @@
 import { TimerDisplay } from "./components/TimerDisplay";
+import { HeadBar } from "./components/HeadBar";
 import { useTimerStore } from "./store/timerStore";
 import styles from "./App.module.css";
 import { useState } from "react";
@@ -9,23 +10,23 @@ function App() {
   const [isExpanded, setIsExpanded] = useState(false);
   const { onMouseDown } = useDrag();
 
+  const handleDoubleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if ((e.target as HTMLElement).closest("button")) return;
+    setIsExpanded((prev) => !prev);
+  };
+  const handleAddTimer = () => {
+    addTimer({ name: "New Timer", duration: 300 });
+  };
+
   return (
     <div
       className={styles.container}
       onMouseDown={onMouseDown}
-      onDoubleClick={(e) => {
-        if ((e.target as HTMLElement).closest("button")) return;
-        setIsExpanded((prev) => !prev);
-      }}
+      onDoubleClick={handleDoubleClick}
     >
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          addTimer({ name: "New Timer", duration: 300 });
-        }}
-      >
-        +
-      </button>
+      {isExpanded && (
+        <HeadBar onDoubleClick={handleDoubleClick} onAddTimer={handleAddTimer} />
+      )}
 
       {timers.map((timer) => (
         <div key={timer.id}>
