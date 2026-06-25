@@ -1,9 +1,9 @@
-import { TimerDisplay } from "./components/TimerDisplay";
 import { HeadBar } from "./components/HeadBar";
 import { useTimerStore } from "./store/timerStore";
 import styles from "./App.module.css";
 import { useState } from "react";
 import { useDrag } from "./hooks/useDrag";
+import { TimerList } from "./components/TimerList";
 
 function App() {
   const { addTimer, toggleTimer, timers } = useTimerStore();
@@ -27,22 +27,7 @@ function App() {
       {isExpanded && (
         <HeadBar onDoubleClick={handleDoubleClick} onAddTimer={handleAddTimer} />
       )}
-
-      {timers.map((timer) => (
-        <div key={timer.id}>
-          <TimerDisplay timerId={timer.id} />
-          {isExpanded && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleTimer(timer.id);
-              }}
-            >
-              {timer.isRunning ? "Pause" : "Start"}
-            </button>
-          )}
-        </div>
-      ))}
+      <TimerList isExpanded={isExpanded} />
     </div>
   );
 }
