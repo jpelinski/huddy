@@ -2,14 +2,17 @@ import { TimerDisplay } from "./components/TimerDisplay";
 import { useTimerStore } from "./store/timerStore";
 import styles from "./App.module.css";
 import { useState } from "react";
+import { useDrag } from "./hooks/useDrag";
 
 function App() {
   const { addTimer, toggleTimer, timers } = useTimerStore();
   const [isExpanded, setIsExpanded] = useState(false);
+  const { onMouseDown } = useDrag();
 
   return (
     <div
       className={styles.container}
+      onMouseDown={onMouseDown}
       onDoubleClick={(e) => {
         if ((e.target as HTMLElement).closest("button")) return;
         setIsExpanded((prev) => !prev);
