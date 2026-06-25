@@ -1,21 +1,42 @@
 import { TimerDisplay } from "./components/TimerDisplay";
 import { useTimerStore } from "./store/timerStore";
 import styles from "./App.module.css";
+import { useState } from "react";
 
 function App() {
   const { addTimer, toggleTimer, timers } = useTimerStore();
+  const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div className={styles.container}>
-      <button onClick={() => addTimer({ name: "New Timer", duration: 10 })}>
-        Add Timer
+    <div
+      className={styles.container}
+      onDoubleClick={(e) => {
+        if ((e.target as HTMLElement).closest("button")) return;
+        setIsExpanded((prev) => !prev);
+      }}
+    >
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          addTimer({ name: "New Timer", duration: 300 });
+        }}
+      >
+        +
       </button>
+
       {timers.map((timer) => (
         <div key={timer.id}>
           <TimerDisplay timerId={timer.id} />
-          <button onClick={() => toggleTimer(timer.id)}>
-            {timer.isRunning ? "Pause" : "Start"}
-          </button>
+          {isExpanded && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleTimer(timer.id);
+              }}
+            >
+              {timer.isRunning ? "Pause" : "Start"}
+            </button>
+          )}
         </div>
       ))}
     </div>
