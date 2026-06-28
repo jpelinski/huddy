@@ -22,6 +22,8 @@ function createWindow() {
             nodeIntegration: false,
         },
     });
+    win.setAlwaysOnTop(true, 'screen-saver')
+    win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })
     win.on('resize', () => win?.webContents.invalidate())
 
     if (!app.isPackaged) {
