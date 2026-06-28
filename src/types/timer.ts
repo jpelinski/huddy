@@ -9,3 +9,8 @@ export interface Timer extends Preset {
     isRunning: boolean;
     isFinished?: boolean;
 }
+export interface TimeObject {
+    hh: string
+    mm: string
+    ss: string
+}
