@@ -1,4 +1,3 @@
-import { useRef, useState } from "react";
 import { useTimer } from "../hooks/useTimer";
 import { useTimerStore } from "../store/timerStore";
 import { formatTime } from "../utils/formatTime";
@@ -11,6 +10,7 @@ interface Props {
 }
 export function TimerDisplay({ timerId }: Props) {
   const timer = useTimerStore((state) => state.timers.find((t) => t.id === timerId));
+  const { toggleTimer } = useTimerStore();
 
   const editTime = useEditTime(timerId);
   const editName = useEditName(timerId);
@@ -22,18 +22,22 @@ export function TimerDisplay({ timerId }: Props) {
   return (
     <div className={`${styles.timer} ${timer.isFinished ? styles.finished : ""}`}>
       {editTime.editing ? (
-        <div className={styles.timeInputGroup}>
+        <div
+          onBlur={(e) => {
+            if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+              editTime.handlers.saveTime();
+            }
+          }}
+        >
           <input
             ref={editTime.refs.hhRef}
             className={styles.timeInput}
             value={editTime.time.hh}
             onFocus={(e) => e.currentTarget.select()}
-            onBlur={editTime.handlers.saveTime}
             onKeyDown={(e) => {
               editTime.handlers.handleKeyDown(e, "hh", editTime.refs.mmRef);
             }}
             readOnly
-            autoFocus
           />
           <span className={styles.timeSeparator}>:</span>
           <input
@@ -41,7 +45,6 @@ export function TimerDisplay({ timerId }: Props) {
             className={styles.timeInput}
             value={editTime.time.mm}
             onFocus={(e) => e.currentTarget.select()}
-            onBlur={editTime.handlers.saveTime}
             onKeyDown={(e) => {
               editTime.handlers.handleKeyDown(
                 e,
@@ -59,18 +62,19 @@ export function TimerDisplay({ timerId }: Props) {
             className={styles.timeInput}
             value={editTime.time.ss}
             onFocus={(e) => e.currentTarget.select()}
-            onBlur={editTime.handlers.saveTime}
             onKeyDown={(e) => {
               editTime.handlers.handleKeyDown(e, "ss", undefined, editTime.refs.mmRef);
             }}
             readOnly
-            autoFocus
           />
         </div>
       ) : (
         <span
           className={styles.time}
-          onClick={() => editTime.handlers.editingStart(timer.remainingTime)}
+          onClick={() => {
+            timer.isRunning ? toggleTimer(timerId) : null;
+            editTime.handlers.editingStart(timer.remainingTime);
+          }}
         >
           {formatTime(timer.remainingTime)}
         </span>
