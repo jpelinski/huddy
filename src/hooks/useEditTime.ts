@@ -33,8 +33,8 @@ export function useEditTime(timerId: string) {
     const handleKeyDown = (
         e: React.KeyboardEvent<HTMLInputElement>,
         segment: keyof TimeObject,
-        nextRef?: React.RefObject<HTMLInputElement>,
-        prevRef?: React.RefObject<HTMLInputElement>
+        nextRef?: React.RefObject<HTMLInputElement | null>,
+        prevRef?: React.RefObject<HTMLInputElement | null>
     ) => {
         if (e.key === 'Enter') { saveTime(); return }
         if (e.key === 'Escape') { cancel(); return }

@@ -6,15 +6,15 @@ export function useEditName(timerId: string) {
     const { updateTimer } = useTimerStore()
     const name = useTimerStore((state) => state.timers.find((t) => t.id === timerId)?.name ?? '')
     const [editing, setEditing] = useState(false)
-    const [newName, setNewName] = useState('')
+    const [updatedName, setUpdatedName] = useState('')
 
 
     const editingStart = () => {
-        setNewName(name)
+        setUpdatedName(name)
         setEditing(true)
     }
     const save = () => {
-        updateTimer(timerId, { name: newName.trim().slice(0, maxLength) || name })
+        updateTimer(timerId, { name: updatedName.trim().slice(0, maxLength) || name })
         setEditing(false)
     }
     const cancel = () => setEditing(false)
@@ -22,9 +22,9 @@ export function useEditName(timerId: string) {
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') save()
         if (e.key === 'Escape') cancel()
-        if (newName.length >= maxLength && e.key !== 'Backspace' && e.key !== 'Escape' && e.key !== 'Enter') return
+        if (updatedName.length >= maxLength && e.key !== 'Backspace' && e.key !== 'Escape' && e.key !== 'Enter') return
     }
     return {
-        editing, newName, setNewName, handlers: { editingStart, save, cancel, handleKeyDown }
+        editing, updatedName, setUpdatedName, handlers: { editingStart, save, cancel, handleKeyDown }
     }
 }
