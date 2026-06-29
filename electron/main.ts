@@ -29,7 +29,7 @@ function createWindow() {
 
     if (!app.isPackaged) {
         win.loadURL("http://localhost:5173");
-        win.webContents.openDevTools()
+        // win.webContents.openDevTools()
     } else {
         win.loadFile(path.join(__dirname, "../dist/index.html"));
     }
@@ -41,9 +41,6 @@ function createTray() {
     const icon = nativeImage.createFromPath(
         path.join(__dirname, '../../src/assets/tray-icon.jpg')
     )
-    const iconPath = path.join(__dirname, '../../assets/tray-icon.jpg')
-    console.log('icon path:', iconPath)
-    console.log('exists:', require('fs').existsSync(iconPath))
 
     tray = new Tray(icon)
     const contextMenu = Menu.buildFromTemplate([
@@ -54,10 +51,6 @@ function createTray() {
 
     tray.setToolTip('Huddy')
     tray.setContextMenu(contextMenu)
-
-    tray.on('click', () => {
-        win?.isVisible() ? win.hide() : win?.show()
-    })
 }
 
 
