@@ -94,6 +94,11 @@ export const useTimerStore = create<TimerStore>()(
         {
             name: 'huddy-storage',
             storage: createJSONStorage(() => persistStorage),
+            onRehydrateStorage: () => (_state, error) => {
+                if (error) {
+                    console.error('Failed to rehudrate store:', error)
+                }
+            }
         }
     )
 )

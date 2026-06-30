@@ -2,7 +2,7 @@ import { app, BrowserWindow, ipcMain, Tray, Menu, nativeImage } from "electron";
 import path from "path";
 import Store from 'electron-store'
 
-const store = new Store()
+const store = new Store({ clearInvalidConfig: true })
 
 let win: BrowserWindow | null = null;
 
