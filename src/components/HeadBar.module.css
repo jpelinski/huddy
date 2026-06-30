@@ -32,3 +32,13 @@
 .btnClose:hover {
   background: rgba(255, 59, 48, 0.6);
 }
+
+.headbarWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.presetPanel {
+  padding: 6px;
+  min-height: 60px;
+}
