@@ -1,5 +1,8 @@
 import { app, BrowserWindow, ipcMain, Tray, Menu, nativeImage } from "electron";
 import path from "path";
+import Store from 'electron-store'
+
+const store = new Store()
 
 let win: BrowserWindow | null = null;
 
@@ -84,4 +87,11 @@ ipcMain.on('set-height', (_event, height: number) => {
     if (!win) return
     const [width] = win.getSize()
     win.setSize(width, height)
+})
+
+ipcMain.handle('store-get', (_event, key: string) => {
+    return store.get(key)
+})
+ipcMain.handle('store-set', (_event, key: string, value: unknown) => {
+    store.set(key, value)
 })

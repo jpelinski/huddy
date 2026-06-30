@@ -1,8 +1,11 @@
 import { contextBridge, ipcRenderer } from 'electron'
+import { isCryptoKey } from 'util/types'
 
 contextBridge.exposeInMainWorld('api', {
     drag: (delta: { x: number, y: number }) => ipcRenderer.send('window-drag', delta),
     close: () => ipcRenderer.invoke('window-close'),
     minimize: () => ipcRenderer.invoke('window-minimize'),
-    setHeight: (height: number) => ipcRenderer.send('set-height', height)
+    setHeight: (height: number) => ipcRenderer.send('set-height', height),
+    storeGet: (key: string) => ipcRenderer.invoke('store-get', key),
+    storeSet: (key: string, value: unknown) => ipcRenderer.invoke('store-set', key, value)
 })
