@@ -1,14 +1,14 @@
 import { HeadBar } from "./components/HeadBar";
 import { useTimerStore } from "./store/timerStore";
 import styles from "./App.module.css";
-import { useState } from "react";
 import { useDrag } from "./hooks/useDrag";
 import { TimerList } from "./components/TimerList";
 import { useEffect, useRef } from "react";
+import { useUIContext } from "./hooks/useUIContext";
 
 function App() {
-  const { addTimer, toggleTimer, timers } = useTimerStore();
-  const [isExpanded, setIsExpanded] = useState(true);
+  const { addTimer, timers } = useTimerStore();
+  const { isExpanded, toggleExpanded } = useUIContext();
   const { onMouseDown } = useDrag();
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -25,7 +25,7 @@ function App() {
   const handleDoubleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if ((e.target as HTMLElement).closest("button") || timers.length === 0) return;
 
-    setIsExpanded((prev) => !prev);
+    toggleExpanded();
   };
   const handleAddTimer = () => {
     addTimer({ name: "New Timer", duration: 300 });

@@ -91,7 +91,7 @@ export function TimerDisplay({ timerId }: Props) {
           autoFocus
         />
       ) : (
-        <span className={styles.label} onClick={editName.handlers.editingStart}>
+        <span className={styles.name} onClick={editName.handlers.editingStart}>
           {timer.name}
         </span>
       )}
