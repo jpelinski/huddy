@@ -1,0 +1,32 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.presetBtn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.presetBtn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+.name {
+  font-size: 0.6rem;
+}
+.duration {
+  font-size: 0.6rem;
+  font-family: var(--text-primary);
+  color: var(--text-primary);
+}
+.empty {
+  font-size: 0.6rem;
+  color: var(--text-primary);
+  text-align: center;
+  padding: 0.5rem;
+}
