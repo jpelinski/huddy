@@ -4,6 +4,7 @@ import { TimerDisplay } from "./TimerDisplay";
 import styles from "./Timer.module.css";
 import type { Timer } from "../types/timer";
 import { useState } from "react";
+import { TimerSettings } from "./TimerSettings";
 
 interface Props {
   timer: Timer;
@@ -56,7 +57,7 @@ export function Timer({ timer }: Props) {
           </button>
         </div>
       </div>
-      {settingsOpen && <div className={styles.settingsPanel}></div>}
+      {settingsOpen && <TimerSettings timerId={timer.id} />}
     </>
   );
 }

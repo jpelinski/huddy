@@ -1,9 +1,16 @@
+.timerSettings {
+  display: flex;
+  padding: 6px;
+  min-height: 90px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
 .btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
+  width: auto;
   height: 20px;
+  padding: 8px;
   border: none;
   background: rgba(255, 255, 255, 0.08);
   color: var(--text-primary);
@@ -13,16 +20,4 @@
 }
 .btn:hover {
   background: rgba(255, 255, 255, 0.15);
-}
-.btnGroup {
-  display: flex;
-  gap: 2px;
-}
-.row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 3px;
-  padding: 3px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
 }

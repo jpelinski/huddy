@@ -1,4 +1,4 @@
-import { Minus, Plus, X, ListCheck } from "lucide-react";
+import { Minus, Plus, X, FolderBookmark } from "lucide-react";
 import styles from "./HeadBar.module.css";
 import { useState } from "react";
 import { PresetList } from "./PresetList";
@@ -17,7 +17,7 @@ export function HeadBar({ onDoubleClick, onAddTimer }: Props) {
           <Plus size={14} />
         </button>
         <button className={styles.btn} onClick={() => setPresetListOpen((prev) => !prev)}>
-          <ListCheck size={14} />
+          <FolderBookmark size={14} />
         </button>
         <div className={styles.headbar__title}>Huddy</div>
         <button className={styles.btn} onClick={() => window.api.minimize()}>
