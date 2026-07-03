@@ -17,7 +17,7 @@
   font-family: var(--font-mono);
   letter-spacing: 0.05rem;
 }
-.finished .time {
+.finished .timer {
   animation: blink 1s ease-in-out infinite;
 }
 

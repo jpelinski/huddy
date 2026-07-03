@@ -39,7 +39,7 @@ export const useTimerStore = create<TimerStore>()(
             })),
             toggleTimer: (id) => set((state) => ({
                 timers: state.timers.map(timer => {
-                    if (timer.id === id) {
+                    if (timer.id === id && !timer.isFinished) {
                         return { ...timer, isRunning: !timer.isRunning };
                     }
                     return timer;
@@ -58,7 +58,8 @@ export const useTimerStore = create<TimerStore>()(
             tickTimer: (id) => set((state) => ({
                 timers: state.timers.map(timer => {
                     if (timer.id !== id || !timer.isRunning) return timer;
-                    const newRemainingTime = timer.remainingTime - 1;
+
+                    const newRemainingTime = Math.max(0, timer.remainingTime - 1);
                     return {
                         ...timer,
                         remainingTime: newRemainingTime,

@@ -5,6 +5,7 @@ import styles from "./Timer.module.css";
 import type { Timer } from "../types/timer";
 import { useState } from "react";
 import { TimerSettings } from "./TimerSettings";
+import { useUIContext } from "../hooks/useUIContext";
 
 interface Props {
   timer: Timer;
@@ -12,10 +13,16 @@ interface Props {
 export function Timer({ timer }: Props) {
   const { toggleTimer, resetTimer, removeTimer } = useTimerStore();
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const { isExpanded } = useUIContext();
+
+  const progress = (1 - timer.remainingTime / timer.duration) * 100;
 
   return (
     <>
-      <div className={styles.row}>
+      <div
+        className={styles.row}
+        style={{ "--progress": `${progress}%` } as React.CSSProperties}
+      >
         <button
           className={styles.btn}
           onClick={(e) => {
@@ -28,15 +35,18 @@ export function Timer({ timer }: Props) {
 
         <TimerDisplay timerId={timer.id} />
         <div className={styles.btnGroup}>
-          <button
-            className={styles.btn}
-            onClick={(e) => {
-              e.stopPropagation();
-              setSettingsOpen((prev) => !prev);
-            }}
-          >
-            <Settings size={14} />
-          </button>
+          {isExpanded && (
+            <button
+              className={styles.btn}
+              data-active={settingsOpen}
+              onClick={(e) => {
+                e.stopPropagation();
+                setSettingsOpen((prev) => !prev);
+              }}
+            >
+              <Settings size={14} />
+            </button>
+          )}
           <button
             className={styles.btn}
             onClick={(e) => {
