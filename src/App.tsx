@@ -5,6 +5,7 @@ import { useDrag } from "./hooks/useDrag";
 import { TimerList } from "./components/TimerList";
 import { useEffect, useRef } from "react";
 import { useUIContext } from "./hooks/useUIContext";
+import { AnimatePresence, motion } from "framer-motion";
 
 function App() {
   const { addTimer, timers } = useTimerStore();
@@ -38,9 +39,21 @@ function App() {
       onMouseDown={onMouseDown}
       onDoubleClick={handleDoubleClick}
     >
-      {isExpanded && (
-        <HeadBar onDoubleClick={handleDoubleClick} onAddTimer={handleAddTimer} />
-      )}
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            key="headbar"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.6, ease: "easeInOut" }}
+            style={{ overflow: "hidden" }}
+          >
+            <HeadBar onDoubleClick={handleDoubleClick} onAddTimer={handleAddTimer} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <TimerList isExpanded={isExpanded} />
     </div>
   );
