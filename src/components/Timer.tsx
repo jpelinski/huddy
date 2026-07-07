@@ -3,16 +3,17 @@ import { useTimerStore } from "../store/timerStore";
 import { TimerDisplay } from "./TimerDisplay";
 import styles from "./Timer.module.css";
 import type { Timer } from "../types/timer";
-import { useState } from "react";
+
 import { TimerSettings } from "./TimerSettings";
 import { useUIContext } from "../hooks/useUIContext";
+import { useUIStore } from "../store/UIStore";
 
 interface Props {
   timer: Timer;
 }
 export function Timer({ timer }: Props) {
   const { toggleTimer, resetTimer, removeTimer } = useTimerStore();
-  const [settingsOpen, setSettingsOpen] = useState(false);
+  const { openSettingsId, setOpenSettingsId } = useUIStore();
   const { isExpanded } = useUIContext();
 
   const progress = (1 - timer.remainingTime / timer.duration) * 100;
@@ -20,28 +21,45 @@ export function Timer({ timer }: Props) {
   return (
     <>
       <div
-        className={styles.row}
-        style={{ "--progress": `${progress}%` } as React.CSSProperties}
+        className={styles.row + (timer.isFinished ? " " + styles.finished : "")}
+        style={
+          {
+            "--progress": `${progress}%`,
+            "--timer-color": timer.color || "none",
+          } as React.CSSProperties
+        }
       >
-        <button
-          className={styles.btn}
-          onClick={(e) => {
-            e.stopPropagation();
-            toggleTimer(timer.id);
-          }}
-        >
-          {timer.isRunning ? <Pause size={14} /> : <Play size={14} />}
-        </button>
+        {timer.isFinished ? (
+          <button
+            className={styles.btn}
+            onClick={(e) => {
+              e.stopPropagation();
+              resetTimer(timer.id);
+            }}
+          >
+            <RotateCcw size={14} />
+          </button>
+        ) : (
+          <button
+            className={styles.btn}
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleTimer(timer.id);
+            }}
+          >
+            {timer.isRunning ? <Pause size={14} /> : <Play size={14} />}
+          </button>
+        )}
 
         <TimerDisplay timerId={timer.id} />
         <div className={styles.btnGroup}>
           {isExpanded && (
             <button
               className={styles.btn}
-              data-active={settingsOpen}
+              data-active={openSettingsId === timer.id}
               onClick={(e) => {
                 e.stopPropagation();
-                setSettingsOpen((prev) => !prev);
+                setOpenSettingsId(openSettingsId === timer.id ? null : timer.id);
               }}
             >
               <Settings size={14} />
@@ -67,7 +85,7 @@ export function Timer({ timer }: Props) {
           </button>
         </div>
       </div>
-      {settingsOpen && <TimerSettings timerId={timer.id} />}
+      {openSettingsId === timer.id && <TimerSettings timerId={timer.id} />}
     </>
   );
 }

@@ -2,11 +2,12 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware'
 import type { Timer, Preset } from '../types/timer';
 import { persistStorage } from '../utils/persistStorage';
+import { useUIStore } from './UIStore';
 
 interface TimerStore {
     timers: Timer[];
     presets: Preset[];
-    addTimer: (preset: Omit<Preset, 'id'>) => void; //Timer from preset
+    addTimer: (preset: Omit<Preset, 'id'>) => void;
     removeTimer: (id: string) => void;
     toggleTimer: (id: string) => void;
     resetTimer: (id: string) => void;
@@ -37,10 +38,16 @@ export const useTimerStore = create<TimerStore>()(
             removeTimer: (id) => set((state) => ({
                 timers: state.timers.filter(timer => timer.id !== id)
             })),
+
             toggleTimer: (id) => set((state) => ({
                 timers: state.timers.map(timer => {
-                    if (timer.id === id && !timer.isFinished) {
-                        return { ...timer, isRunning: !timer.isRunning };
+                    if (timer.id === id) {
+                        if (timer.isFinished && timer.remainingTime > 0) {
+                            return { ...timer, isRunning: !timer.isRunning, isFinished: false };
+                        }
+                        if (!timer.isFinished) {
+                            return { ...timer, isRunning: !timer.isRunning };
+                        }
                     }
                     return timer;
                 }),

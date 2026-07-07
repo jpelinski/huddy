@@ -3,11 +3,11 @@
   border-radius: 0;
   padding: 0;
   height: auto;
+  width: auto;
   display: flex;
   flex-direction: column;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   transform: translateZ(0);
   will-change: transform;
-  /* border: 1px solid rgba(97, 255, 62, 0.1); */
 }

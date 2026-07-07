@@ -9,10 +9,11 @@
   color: var(--text-primary);
   border-radius: 4px;
   cursor: pointer;
-  transition: background 0.2s ease-in-out;
+  transition: background 0.3s ease-in-out;
 }
 .btn:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.8);
+  color: rgba(0, 0, 0, 0.7);
 }
 .btn[data-active="true"] {
   background: rgba(255, 255, 255, 0.8);
@@ -28,10 +29,23 @@
   justify-content: space-between;
   gap: 0px;
   padding: 2px 5px;
-  /* border-bottom: 1px solid rgba(255, 255, 255, 0.5); */
   background: linear-gradient(
     to left,
-    rgba(255, 255, 255, 0.19) var(--progress),
-    transparent var(--progress)
+    transparent var(--progress),
+    var(--timer-color) var(--progress)
   );
+}
+
+.finished {
+  animation: blink 1s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    background: var(--bgc);
+  }
+  50% {
+    background: var(--danger);
+  }
 }

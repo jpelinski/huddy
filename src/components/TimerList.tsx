@@ -2,13 +2,18 @@ import styles from "./TimerList.module.css";
 import { useTimerStore } from "../store/timerStore";
 import { Timer } from "./Timer";
 import { AnimatePresence, motion } from "framer-motion";
+import { useUIStore } from "../store/UIStore";
+import { useEffect } from "react";
 
-interface Props {
-  isExpanded: boolean;
-}
-
-export function TimerList({ isExpanded }: Props) {
+export function TimerList() {
+  const { setIsExpanded } = useUIStore();
   const { timers } = useTimerStore();
+
+  useEffect(() => {
+    if (timers.length === 0) {
+      setIsExpanded(true);
+    }
+  }, [timers.length]);
 
   return (
     <div className={styles.timerList}>

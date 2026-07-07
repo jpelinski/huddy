@@ -4,12 +4,12 @@ import styles from "./App.module.css";
 import { useDrag } from "./hooks/useDrag";
 import { TimerList } from "./components/TimerList";
 import { useEffect, useRef } from "react";
-import { useUIContext } from "./hooks/useUIContext";
 import { AnimatePresence, motion } from "framer-motion";
+import { useUIStore } from "./store/UIStore";
 
 function App() {
   const { addTimer, timers } = useTimerStore();
-  const { isExpanded, toggleExpanded } = useUIContext();
+  const { isExpanded, toggleExpanded } = useUIStore();
   const { onMouseDown } = useDrag();
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -54,7 +54,7 @@ function App() {
         )}
       </AnimatePresence>
 
-      <TimerList isExpanded={isExpanded} />
+      <TimerList />
     </div>
   );
 }
