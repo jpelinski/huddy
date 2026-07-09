@@ -6,6 +6,7 @@ import { TimerList } from "./components/TimerList";
 import { useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useUIStore } from "./store/UIStore";
+import { Clock } from "./components/Clock";
 
 function App() {
   const { addTimer, timers } = useTimerStore();
@@ -31,6 +32,7 @@ function App() {
   const handleAddTimer = () => {
     addTimer({ name: "New Timer", duration: 300 });
   };
+  const { clockVisible } = useUIStore();
 
   return (
     <div
@@ -53,7 +55,7 @@ function App() {
           </motion.div>
         )}
       </AnimatePresence>
-
+      {clockVisible && <Clock />}
       <TimerList />
     </div>
   );

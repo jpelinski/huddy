@@ -6,12 +6,16 @@ interface UIStore {
     setIsExpanded: (value: boolean) => void;
     openSettingsId: string | null;
     setOpenSettingsId: (id: string | null) => void;
+    clockVisible: boolean;
+    setClockVisible: (value: boolean) => void;
 }
 
 export const useUIStore = create<UIStore>((set) => ({
     isExpanded: true,
     toggleExpanded: () => set((state) => ({ isExpanded: !state.isExpanded })),
-    setIsExpanded: (value: boolean) => set((state) => ({ isExpanded: value })),
+    setIsExpanded: (value: boolean) => set(() => ({ isExpanded: value })),
     openSettingsId: null,
-    setOpenSettingsId: (id: string | null) => set((state) => ({ openSettingsId: id })),
+    setOpenSettingsId: (id: string | null) => set(() => ({ openSettingsId: id })),
+    clockVisible: false,
+    setClockVisible: (value: boolean) => set(() => ({ clockVisible: value }))
 }));
