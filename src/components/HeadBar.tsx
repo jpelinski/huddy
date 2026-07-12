@@ -1,8 +1,10 @@
 import { Minus, Plus, X, FolderBookmark, LucideClock } from "lucide-react";
 import styles from "./HeadBar.module.css";
+import btnStyles from "../styles/buttons.module.css";
 import { useState } from "react";
 import { PresetList } from "./PresetList";
 import { useUIStore } from "../store/UIStore";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface Props {
   onDoubleClick: (e: React.MouseEvent<HTMLDivElement>) => void;
@@ -11,23 +13,47 @@ interface Props {
 
 export function HeadBar({ onDoubleClick, onAddTimer }: Props) {
   const [presetListOpen, setPresetListOpen] = useState(false);
+  const [hoverLabel, setHoverLabel] = useState<string | null>(null);
   const { clockVisible, setClockVisible } = useUIStore();
 
   return (
     <div className={styles.headbarWrapper}>
       <div className={styles.headbar} onDoubleClick={onDoubleClick}>
-        <button className={styles.btn} onClick={onAddTimer}>
+        <button
+          className={btnStyles.btn}
+          onClick={onAddTimer}
+          onMouseEnter={() => setHoverLabel("Add Timer")}
+          onMouseLeave={() => setHoverLabel(null)}
+        >
           <Plus size={14} />
         </button>
-        <button className={styles.btn} onClick={() => setPresetListOpen((prev) => !prev)}>
+        <button
+          className={btnStyles.btn}
+          data-active={presetListOpen}
+          onClick={() => setPresetListOpen((prev) => !prev)}
+          onMouseEnter={() => setHoverLabel("Preset List")}
+          onMouseLeave={() => setHoverLabel(null)}
+        >
           <FolderBookmark size={14} />
         </button>
-        <div className={styles.headbar__title}>Huddy</div>
-        <button className={styles.btn} onClick={() => window.api.minimize()}>
+        <div className={styles.headbar__title}>
+          <AnimatePresence mode="wait">
+            <motion.span
+              key={hoverLabel ?? "Huddy"}
+              initial={{ opacity: 0, y: -30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: 0.2 }}
+            >
+              {hoverLabel ?? "Huddy"}
+            </motion.span>
+          </AnimatePresence>
+        </div>
+        <button className={btnStyles.btn} onClick={() => window.api.minimize()}>
           <Minus size={14} />
         </button>
         <button
-          className={`${styles.btn} ${styles.btnClose}`}
+          className={`${btnStyles.btn} ${btnStyles.btnClose}`}
           onClick={() => window.api.close()}
         >
           <X size={14} />
@@ -35,9 +61,11 @@ export function HeadBar({ onDoubleClick, onAddTimer }: Props) {
       </div>
       <div className={styles.headbar__underbar}>
         <button
-          className={styles.btn}
+          className={btnStyles.btn}
           data-active={clockVisible}
           onClick={() => setClockVisible(!clockVisible)}
+          onMouseEnter={() => setHoverLabel("Clock On/Off")}
+          onMouseLeave={() => setHoverLabel(null)}
         >
           <LucideClock size={14} />
         </button>
