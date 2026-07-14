@@ -73,7 +73,7 @@ export function TimerSettings({ timerId }: { timerId: string }) {
         style={{ marginTop: "1rem", outline: "1px solid white" }}
         onClick={(e) => {
           e.stopPropagation();
-          addPreset({ name: timer.name, duration: timer.duration });
+          addPreset({ name: timer.name, duration: timer.duration, color: timer.color });
         }}
       >
         <Save size={14} />

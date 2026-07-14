@@ -2,7 +2,6 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware'
 import type { Timer, Preset } from '../types/timer';
 import { persistStorage } from '../utils/persistStorage';
-import { useUIStore } from './UIStore';
 
 interface TimerStore {
     timers: Timer[];
