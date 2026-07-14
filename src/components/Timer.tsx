@@ -5,7 +5,6 @@ import styles from "./Timer.module.css";
 import type { Timer } from "../types/timer";
 
 import { TimerSettings } from "./TimerSettings";
-import { useUIContext } from "../hooks/useUIContext";
 import { useUIStore } from "../store/UIStore";
 
 interface Props {
