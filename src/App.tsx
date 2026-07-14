@@ -10,7 +10,7 @@ import { Clock } from "./components/Clock";
 
 function App() {
   const { addTimer, timers } = useTimerStore();
-  const { isExpanded, toggleExpanded } = useUIStore();
+  const { isExpanded, toggleExpanded, setOpenSettingsId } = useUIStore();
   const { onMouseDown } = useDrag();
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -26,7 +26,7 @@ function App() {
 
   const handleDoubleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if ((e.target as HTMLElement).closest("button") || timers.length === 0) return;
-
+    setOpenSettingsId(null);
     toggleExpanded();
   };
   const handleAddTimer = () => {

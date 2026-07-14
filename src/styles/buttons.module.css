@@ -12,6 +12,9 @@
   color: var(--text-primary);
   cursor: pointer;
   transition: background 0.2s ease-in-out;
+  font-family: var(--font-mono);
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
 }
 
 .btn:hover {

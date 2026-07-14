@@ -13,8 +13,7 @@ interface Props {
 }
 export function Timer({ timer }: Props) {
   const { toggleTimer, resetTimer, removeTimer } = useTimerStore();
-  const { openSettingsId, setOpenSettingsId } = useUIStore();
-  const { isExpanded } = useUIContext();
+  const { openSettingsId, setOpenSettingsId, isExpanded } = useUIStore();
 
   const progress = (1 - timer.remainingTime / timer.duration) * 100;
 

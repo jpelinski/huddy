@@ -1,28 +1,48 @@
 .timerSettings {
   display: flex;
+  flex-direction: column;
   padding: 3px;
   min-height: 90px;
-  border: 3px solid rgba(255, 255, 255, 0.1);
-  background: transparent;
+  background: rgba(0, 0, 0, 0.25);
 }
-.btn {
+.colorSection {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: auto;
-  height: 20px;
-  padding: 8px;
-  border: none;
-  background: rgba(255, 255, 255, 0.08);
+  margin-top: 0.7rem;
+}
+.colorLabel {
+  display: flex;
+  font-size: 0.7rem;
   color: var(--text-primary);
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.2s ease-in-out;
+  margin-bottom: 0.2rem;
 }
-.btn:hover {
-  background: rgba(255, 255, 255, 0.15);
+.colorOptions {
+  display: flex;
+  gap: 0.3rem;
+  padding-top: 5px;
+  border-top: 1px solid var(--text-secondary);
 }
+
 .colorPicker :global(.react-colorful) {
-  width: 130px;
-  height: 130px;
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  width: 150px;
+  height: 100px;
+  margin-top: 20px;
+}
+.colorButtons {
+  font-size: 0.7rem;
+  margin: 2px;
+  padding: 2px;
+  outline: 1px solid var(--text-primary);
+}
+.colorButtons[data-activeBorder="true"] {
+  outline: 3px solid var(--text-primary);
+}
+.colorTextButtons {
+  font-size: 0.7rem;
+  margin: 2px;
+  padding: 2px;
 }
