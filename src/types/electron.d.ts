@@ -5,6 +5,9 @@ export interface ElectronAPI {
     setHeight: (height: number) => void
     storeGet: (key: string) => Promise<unknown>
     storeSet: (key: string, value: unknown) => Promise<void>
+    startMonitor: (processName: string) => Promise<void>
+    stopMonitor: () => Promise<void>
+    onMonitorUpdate: (callback: (data: { isRunning: boolean }) => void) => () => void
 }
 declare global {
     interface Window {

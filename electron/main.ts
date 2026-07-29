@@ -1,6 +1,7 @@
 import { app, BrowserWindow, ipcMain, Tray, Menu, nativeImage } from "electron";
 import path from "path";
 import Store from 'electron-store'
+import si from 'systeminformation'
 
 const store = new Store({ clearInvalidConfig: true })
 
@@ -94,4 +95,22 @@ ipcMain.handle('store-get', (_event, key: string) => {
 })
 ipcMain.handle('store-set', (_event, key: string, value: unknown) => {
     store.set(key, value)
+})
+
+let monitorInterval: NodeJS.Timeout | null = null
+
+ipcMain.handle('start-monitor', async (_event, processName: string) => {
+    if (monitorInterval) clearInterval(monitorInterval)
+
+    monitorInterval = setInterval(async () => {
+        const processes = await si.processes()
+        const isRunning = processes.list.some(p => p.name === processName)
+        win?.webContents.send('monitor-update', { isRunning })
+    }, 1000)
+})
+ipcMain.handle('stop-monitor', () => {
+    if (monitorInterval) {
+        clearInterval(monitorInterval)
+        monitorInterval = null
+    }
 })

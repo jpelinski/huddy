@@ -30,7 +30,7 @@ export function TimerSettings({ timerId }: { timerId: string }) {
           {PRESET_COLORS.map((presetColor) => (
             <button
               key={presetColor}
-              className={`${btnStyles.btn} ${styles.colorButtons}`}
+              className={`${btnStyles.btn} ${btnStyles.colorButtons}`}
               style={{
                 backgroundColor: presetColor,
               }}
@@ -42,7 +42,7 @@ export function TimerSettings({ timerId }: { timerId: string }) {
             ></button>
           ))}
           <button
-            className={`${btnStyles.btn} ${styles.colorTextButtons}`}
+            className={`${btnStyles.btn} ${btnStyles.textButtons}`}
             style={{}}
             onClick={(e) => {
               e.stopPropagation();
@@ -52,7 +52,7 @@ export function TimerSettings({ timerId }: { timerId: string }) {
             Reset
           </button>
           <button
-            className={`${btnStyles.btn} ${styles.colorTextButtons}`}
+            className={`${btnStyles.btn} ${btnStyles.textButtons}`}
             data-active={isColorPickerOpen}
             onClick={(e) => {
               e.stopPropagation();
@@ -69,8 +69,7 @@ export function TimerSettings({ timerId }: { timerId: string }) {
         </div>
       )}
       <button
-        className={btnStyles.btn}
-        style={{ marginTop: "1rem", outline: "1px solid white" }}
+        className={`${btnStyles.btn} ${btnStyles.outlinedButton}`}
         onClick={(e) => {
           e.stopPropagation();
           addPreset({ name: timer.name, duration: timer.duration, color: timer.color });

@@ -9,7 +9,10 @@
   text-align: center;
   font-size: 12px;
 }
-
+.headbar__underbar {
+  display: flex;
+  flex-direction: row;
+}
 .headbarWrapper {
   display: flex;
   flex-direction: column;
@@ -19,4 +22,7 @@
 
 .presetPanel {
   min-height: 60px;
+}
+.settingsPanel {
+  border-top: 1px solid rgba(255, 255, 255, 0);
 }

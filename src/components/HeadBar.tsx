@@ -1,11 +1,11 @@
-import { Minus, Plus, X, FolderBookmark, LucideClock } from "lucide-react";
+import { Minus, Plus, X, FolderBookmark, LucideClock, Settings } from "lucide-react";
 import styles from "./HeadBar.module.css";
 import btnStyles from "../styles/buttons.module.css";
 import { useState } from "react";
 import { PresetList } from "./PresetList";
 import { useUIStore } from "../store/UIStore";
 import { AnimatePresence, motion } from "framer-motion";
-
+import { AppSettings } from "./AppSettings";
 interface Props {
   onDoubleClick: (e: React.MouseEvent<HTMLDivElement>) => void;
   onAddTimer: () => void;
@@ -15,6 +15,7 @@ export function HeadBar({ onDoubleClick, onAddTimer }: Props) {
   const [presetListOpen, setPresetListOpen] = useState(false);
   const [hoverLabel, setHoverLabel] = useState<string | null>(null);
   const { clockVisible, setClockVisible } = useUIStore();
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   return (
     <div className={styles.headbarWrapper}>
@@ -69,7 +70,21 @@ export function HeadBar({ onDoubleClick, onAddTimer }: Props) {
         >
           <LucideClock size={14} />
         </button>
+        <button
+          className={btnStyles.btn}
+          data-active={settingsOpen}
+          onClick={() => setSettingsOpen((prev) => !prev)}
+          onMouseEnter={() => setHoverLabel("Settings")}
+          onMouseLeave={() => setHoverLabel(null)}
+        >
+          <Settings size={14} />
+        </button>
       </div>
+      {settingsOpen && (
+        <div className={styles.settingsPanel}>
+          <AppSettings />
+        </div>
+      )}
       {presetListOpen && (
         <div className={styles.presetPanel}>
           <PresetList />

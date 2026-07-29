@@ -13,8 +13,6 @@
   cursor: pointer;
   transition: background 0.2s ease-in-out;
   font-family: var(--font-mono);
-  box-sizing: border-box;
-  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
 }
 
 .btn:hover {
@@ -29,4 +27,23 @@
 .btn[data-active="true"] {
   background: var(--color-secondary);
   color: rgba(0, 0, 0, 0.7);
+}
+
+.colorButtons {
+  font-size: 0.7rem;
+  margin: 2px;
+  padding: 2px;
+  outline: 1px solid var(--text-primary);
+}
+.colorButtons[data-activeBorder="true"] {
+  outline: 3px solid var(--text-primary);
+}
+.colorTextButtons {
+  font-size: 0.7rem;
+  margin: 2px;
+  padding: 2px;
+}
+.outlinedButton {
+  margin-top: 1rem;
+  outline: 1px solid white;
 }
