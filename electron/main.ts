@@ -97,20 +97,28 @@ ipcMain.handle('store-set', (_event, key: string, value: unknown) => {
     store.set(key, value)
 })
 
-let monitorInterval: NodeJS.Timeout | null = null
+let processInterval: NodeJS.Timeout | null = null
+let networkInterval: NodeJS.Timeout | null = null
 
 ipcMain.handle('start-monitor', async (_event, processName: string) => {
-    if (monitorInterval) clearInterval(monitorInterval)
+    if (processInterval) clearInterval(processInterval)
+    if (networkInterval) clearInterval(networkInterval)
 
-    monitorInterval = setInterval(async () => {
+
+    processInterval = setInterval(async () => {
         const processes = await si.processes()
         const isRunning = processes.list.some(p => p.name === processName)
-        win?.webContents.send('monitor-update', { isRunning })
+        win?.webContents.send('monitor-update', { type: 'process', isRunning })
+    }, 3000)
+
+    networkInterval = setInterval(async () => {
+        const connections = await si.networkConnections()
+        const isConnected = connections.some(c => c.process === processName)
+        win?.webContents.send("monitor-update", { type: "network", isConnected })
     }, 1000)
 })
+
 ipcMain.handle('stop-monitor', () => {
-    if (monitorInterval) {
-        clearInterval(monitorInterval)
-        monitorInterval = null
-    }
+    if (processInterval) { clearInterval(processInterval); processInterval = null }
+    if (networkInterval) { clearInterval(networkInterval); networkInterval = null }
 })

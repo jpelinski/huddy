@@ -32,17 +32,3 @@
   height: 100px;
   margin-top: 20px;
 }
-.colorButtons {
-  font-size: 0.7rem;
-  margin: 2px;
-  padding: 2px;
-  outline: 1px solid var(--text-primary);
-}
-.colorButtons[data-activeBorder="true"] {
-  outline: 3px solid var(--text-primary);
-}
-.colorTextButtons {
-  font-size: 0.7rem;
-  margin: 2px;
-  padding: 2px;
-}

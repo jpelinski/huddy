@@ -12,3 +12,20 @@
   color: var(--text-primary);
   letter-spacing: 0.05rem;
 }
+.indicators {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.dot {
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--danger);
+}
+
+.dot[data-active="true"] {
+  background: #4a7c59;
+}

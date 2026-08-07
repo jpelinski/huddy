@@ -10,7 +10,7 @@ contextBridge.exposeInMainWorld('api', {
     storeSet: (key: string, value: unknown) => ipcRenderer.invoke('store-set', key, value),
     startMonitor: (processName: string) => ipcRenderer.invoke('start-monitor', processName),
     stopMonitor: () => ipcRenderer.invoke('stop-monitor'),
-    onMonitorUpdate: (callback: (data: { isRunning: boolean }) => void) => {
+    onMonitorUpdate: (callback: (data: { type: 'process', isRunning: boolean } | { type: 'network', isConnected: boolean }) => void) => {
         ipcRenderer.on('monitor-update', (_event, data) => callback(data))
         return () => ipcRenderer.removeAllListeners('monitor-update')
     }

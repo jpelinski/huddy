@@ -8,6 +8,8 @@ interface UIStore {
     setOpenSettingsId: (id: string | null) => void;
     clockVisible: boolean;
     setClockVisible: (value: boolean) => void;
+    monitoredProcess: string | null,
+    setMonitoredProcess: (name: string | null) => void
 }
 
 export const useUIStore = create<UIStore>((set) => ({
@@ -17,5 +19,7 @@ export const useUIStore = create<UIStore>((set) => ({
     openSettingsId: null,
     setOpenSettingsId: (id: string | null) => set(() => ({ openSettingsId: id })),
     clockVisible: false,
-    setClockVisible: (value: boolean) => set(() => ({ clockVisible: value }))
+    setClockVisible: (value: boolean) => set(() => ({ clockVisible: value })),
+    monitoredProcess: null,
+    setMonitoredProcess: (name) => set({ monitoredProcess: name })
 }));
