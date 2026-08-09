@@ -13,8 +13,13 @@ export function Clock() {
       <span className={styles.time}>{formattedTime}</span>
       {monitoredProcess}
       <div className={styles.indicators}>
-        <span className={styles.dot} data-active={isRunning} title="Process" />
-        <span className={styles.dot} data-active={isConnected} title="Connection" />
+        Proces: {monitoredProcess}
+        <span className={styles.dot} data-active={isRunning} title="Process">
+          {isRunning}
+        </span>
+        <span className={styles.dot} data-active={isConnected} title="Connection">
+          {isConnected}
+        </span>
       </div>
     </div>
   );

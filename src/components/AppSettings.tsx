@@ -2,14 +2,15 @@ import { useState } from "react";
 import { useProcessMonitor } from "../hooks/useProcessMonitor";
 import styles from "./AppSettings.module.css";
 import btnStyles from "../styles/buttons.module.css";
+import { useUIStore } from "../store/UIStore";
 
 export function AppSettings() {
-  const [processName, setProcessName] = useState<string | null>(null);
+  const { monitoredProcess, setMonitoredProcess } = useUIStore();
   const [inputValue, setInputValue] = useState("BlackDesert64.exe");
-  const { isRunning } = useProcessMonitor(processName);
+  const { isRunning } = useProcessMonitor(monitoredProcess);
 
   const handleSubmit = () => {
-    setProcessName(inputValue.trim() || null);
+    setMonitoredProcess(inputValue.trim() || null);
   };
   return (
     <div className={styles.panel}>
@@ -28,14 +29,14 @@ export function AppSettings() {
             Apply
           </button>
         </div>
-        {processName && (
+        {monitoredProcess && (
           <div className={styles.status}>
             <div className={styles.dot} data-running={isRunning}>
               {" "}
             </div>
             <span>
               {" "}
-              {processName} - {isRunning ? "Running" : "Not Found"}
+              {monitoredProcess} - {isRunning ? "Running" : "Not Found"}
             </span>
           </div>
         )}

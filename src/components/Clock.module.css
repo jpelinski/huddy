@@ -27,5 +27,8 @@
 }
 
 .dot[data-active="true"] {
-  background: #4a7c59;
+  background: blue;
+}
+.dot[data-active="false"] {
+  background: red;
 }
