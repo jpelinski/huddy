@@ -2,8 +2,14 @@ import { app, BrowserWindow, ipcMain, Tray, Menu, nativeImage } from "electron";
 import path from "path";
 import Store from 'electron-store'
 import si from 'systeminformation'
+import fs from 'fs'
 
 const store = new Store({ clearInvalidConfig: true })
+const logPath = path.join(app.getPath('userData'), 'network-log.txt')
+const writeLog = (data: unknown) => {
+    const logEntry = `${new Date().toISOString()} - ${JSON.stringify(data)}\n`
+    fs.appendFileSync(logPath, logEntry)
+}
 
 let win: BrowserWindow | null = null;
 
@@ -99,6 +105,8 @@ ipcMain.handle('store-set', (_event, key: string, value: unknown) => {
 
 let processInterval: NodeJS.Timeout | null = null
 let networkInterval: NodeJS.Timeout | null = null
+let lastConnectionCount: number | null = null
+let lastConnectionStates: string[] = []
 
 ipcMain.handle('start-monitor', async (_event, processName: string) => {
     if (processInterval) clearInterval(processInterval)
@@ -113,8 +121,24 @@ ipcMain.handle('start-monitor', async (_event, processName: string) => {
 
     networkInterval = setInterval(async () => {
         const connections = await si.networkConnections()
-        const isConnected = connections.some(c => c.process === processName)
+        const filteredConnections = connections.filter(c => c.process.includes(processName))
+        const isConnected = filteredConnections.length > 0
+
+        const currentCount = filteredConnections.length
+        const currentStates = filteredConnections.map(c => c.state)
+
+        const countChanged = currentCount !== lastConnectionCount
+        const statesChanged = currentStates.length !== lastConnectionStates.length ||
+            currentStates.some((state, i) => state !== lastConnectionStates[i])
+
+        if (countChanged || statesChanged) {
+            writeLog({ type: "network", isConnected, currentCount, filteredConnections })
+            lastConnectionCount = currentCount
+            lastConnectionStates = currentStates
+        }
+
         win?.webContents.send("monitor-update", { type: "network", isConnected })
+
     }, 1000)
 })
 

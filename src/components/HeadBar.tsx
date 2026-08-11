@@ -6,6 +6,7 @@ import { PresetList } from "./PresetList";
 import { useUIStore } from "../store/UIStore";
 import { AnimatePresence, motion } from "framer-motion";
 import { AppSettings } from "./AppSettings";
+import { Monitor } from "./Monitor";
 interface Props {
   onDoubleClick: (e: React.MouseEvent<HTMLDivElement>) => void;
   onAddTimer: () => void;
@@ -90,6 +91,7 @@ export function HeadBar({ onDoubleClick, onAddTimer }: Props) {
           <PresetList />
         </div>
       )}
+      <Monitor />
     </div>
   );
 }
