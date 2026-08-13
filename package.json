@@ -49,7 +49,7 @@
     "productName": "Huddy",
     "files": [
       "dist/**/*",
-      "electron/**/*"
+      "electron/dist/**/*"
     ],
     "win": {
       "target": "nsis"
