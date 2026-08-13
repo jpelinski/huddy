@@ -107,21 +107,30 @@ let processInterval: NodeJS.Timeout | null = null
 let networkInterval: NodeJS.Timeout | null = null
 let lastConnectionCount: number | null = null
 let lastConnectionStates: string[] = []
-
+let currentPid: number | null = null
+let founded : string | null
 ipcMain.handle('start-monitor', async (_event, processName: string) => {
     if (processInterval) clearInterval(processInterval)
     if (networkInterval) clearInterval(networkInterval)
 
 
+
     processInterval = setInterval(async () => {
         const processes = await si.processes()
-        const isRunning = processes.list.some(p => p.name === processName)
+        let found = processes.list.find(p => p.name.includes(processName) )
+        const isRunning = Boolean(found)
+        currentPid = found  ? found.pid : null
+
         win?.webContents.send('monitor-update', { type: 'process', isRunning })
     }, 3000)
 
     networkInterval = setInterval(async () => {
+         if (!currentPid) {
+            win?.webContents.send("monitor-update", { type: "network", isConnected: false })
+            return
+        }
         const connections = await si.networkConnections()
-        const filteredConnections = connections.filter(c => c.process.includes(processName))
+        const filteredConnections = connections.filter(c => c.pid === currentPid)
         const isConnected = filteredConnections.length > 0
 
         const currentCount = filteredConnections.length
@@ -132,7 +141,7 @@ ipcMain.handle('start-monitor', async (_event, processName: string) => {
             currentStates.some((state, i) => state !== lastConnectionStates[i])
 
         if (countChanged || statesChanged) {
-            writeLog({ type: "network", isConnected, currentCount, filteredConnections })
+            writeLog({ type: "network", isConnected, currentCount, filteredConnections  })
             lastConnectionCount = currentCount
             lastConnectionStates = currentStates
         }
@@ -145,4 +154,8 @@ ipcMain.handle('start-monitor', async (_event, processName: string) => {
 ipcMain.handle('stop-monitor', () => {
     if (processInterval) { clearInterval(processInterval); processInterval = null }
     if (networkInterval) { clearInterval(networkInterval); networkInterval = null }
+    currentPid = null
+    lastConnectionCount = null
+    lastConnectionStates = []
+
 })
