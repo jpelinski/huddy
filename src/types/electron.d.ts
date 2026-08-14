@@ -8,6 +8,9 @@ export interface ElectronAPI {
     startMonitor: (processName: string) => Promise<void>
     stopMonitor: () => Promise<void>
     onMonitorUpdate: (callback: (data: { type: 'process', isRunning: boolean } | { type: 'network', isConnected: boolean }) => void) => () => void
+    onUpdateAvailable: (callback: () => void) => () => void
+    onUpdateDownloaded: (callback: () => void) => () => void
+    installUpdate: () => void
 }
 declare global {
     interface Window {

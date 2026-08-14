@@ -1,8 +1,11 @@
 import { app, BrowserWindow, ipcMain, Tray, Menu, nativeImage } from "electron";
+import { autoUpdater } from "electron-updater";
 import path from "path";
 import Store from 'electron-store'
 import si from 'systeminformation'
 import fs from 'fs'
+
+autoUpdater.checkForUpdatesAndNotify()
 
 const store = new Store({ clearInvalidConfig: true })
 const logPath = path.join(app.getPath('userData'), 'network-log.txt')
@@ -173,4 +176,19 @@ ipcMain.handle('stop-monitor', () => {
     lastConnectionCount = null
     lastConnectionStates = []
 
+})
+
+autoUpdater.on('update-available', () => {
+    win?.webContents.send('update-available')
+})
+
+autoUpdater.on('update-downloaded', () => {
+    win?.webContents.send('update-downloaded')
+})
+
+autoUpdater.on('error', (err) => {
+    console.error('AutoUpdater error:', err)
+})
+ipcMain.on('install-update', () => {
+    autoUpdater.quitAndInstall()
 })

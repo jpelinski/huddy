@@ -1,5 +1,4 @@
 import { contextBridge, ipcRenderer } from 'electron'
-import { isCryptoKey } from 'util/types'
 
 contextBridge.exposeInMainWorld('api', {
     drag: (delta: { x: number, y: number }) => ipcRenderer.send('window-drag', delta),
@@ -13,5 +12,14 @@ contextBridge.exposeInMainWorld('api', {
     onMonitorUpdate: (callback: (data: { type: 'process', isRunning: boolean } | { type: 'network', isConnected: boolean }) => void) => {
         ipcRenderer.on('monitor-update', (_event, data) => callback(data))
         return () => ipcRenderer.removeAllListeners('monitor-update')
-    }
+    },
+    onUpdateAvailable: (callback: () => void) => {
+        ipcRenderer.on('update-available', callback)
+        return () => ipcRenderer.removeAllListeners('update-available')
+    },
+    onUpdateDownloaded: (callback: () => void) => {
+        ipcRenderer.on('update-downloaded', callback)
+        return () => ipcRenderer.removeAllListeners('update-downloaded')
+    },
+    installUpdate: () => ipcRenderer.send('install-update'),
 })

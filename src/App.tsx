@@ -7,6 +7,7 @@ import { useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useUIStore } from "./store/UIStore";
 import { Clock } from "./components/Clock";
+import { Update } from "./components/Update";
 
 function App() {
   const { addTimer, timers } = useTimerStore();
@@ -59,6 +60,7 @@ function App() {
       <TimerList />
     </div>
   );
+  <Update />;
 }
 
 export default App;
