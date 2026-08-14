@@ -7,8 +7,24 @@ import fs from 'fs'
 const store = new Store({ clearInvalidConfig: true })
 const logPath = path.join(app.getPath('userData'), 'network-log.txt')
 const writeLog = (data: unknown) => {
-    const logEntry = `${new Date().toISOString()} - ${JSON.stringify(data)}\n`
-    fs.appendFileSync(logPath, logEntry)
+    const timestamp = new Date().toISOString()
+    const header = `\n[${timestamp}]\n`
+
+    if (typeof data === 'object' && data !== null && 'filteredConnections' in data) {
+        const { filteredConnections, ...rest } = data as { filteredConnections: unknown[], [key: string]: unknown }
+        let log = header
+        log += `type: ${rest.type} | isConnected: ${rest.isConnected} | count: ${rest.currentCount}\n`
+        log += `connections:\n`
+        filteredConnections.forEach((c: unknown) => {
+            const connection = c as { localAddress: string, localPort: number, peerAddress: string, peerPort: number, state: string, pid: number }
+            log += ` ${connection.localAddress}:${connection.localPort} -> ${connection.peerAddress}:${connection.peerPort} | ${connection.state} | pid: ${connection.pid}\n`
+        })
+        fs.appendFileSync(logPath, log)
+
+    } else {
+
+        fs.appendFileSync(logPath, header + JSON.stringify(data, null, 2) + '\n')
+    }
 }
 
 let win: BrowserWindow | null = null;
@@ -108,7 +124,6 @@ let networkInterval: NodeJS.Timeout | null = null
 let lastConnectionCount: number | null = null
 let lastConnectionStates: string[] = []
 let currentPid: number | null = null
-let founded : string | null
 ipcMain.handle('start-monitor', async (_event, processName: string) => {
     if (processInterval) clearInterval(processInterval)
     if (networkInterval) clearInterval(networkInterval)
@@ -117,15 +132,15 @@ ipcMain.handle('start-monitor', async (_event, processName: string) => {
 
     processInterval = setInterval(async () => {
         const processes = await si.processes()
-        let found = processes.list.find(p => p.name.includes(processName) )
+        const found = processes.list.find(p => p.name.includes(processName))
         const isRunning = Boolean(found)
-        currentPid = found  ? found.pid : null
+        currentPid = found ? found.pid : null
 
         win?.webContents.send('monitor-update', { type: 'process', isRunning })
     }, 3000)
 
     networkInterval = setInterval(async () => {
-         if (!currentPid) {
+        if (!currentPid) {
             win?.webContents.send("monitor-update", { type: "network", isConnected: false })
             return
         }
@@ -141,7 +156,7 @@ ipcMain.handle('start-monitor', async (_event, processName: string) => {
             currentStates.some((state, i) => state !== lastConnectionStates[i])
 
         if (countChanged || statesChanged) {
-            writeLog({ type: "network", isConnected, currentCount, filteredConnections  })
+            writeLog({ type: "network", isConnected, currentCount, filteredConnections })
             lastConnectionCount = currentCount
             lastConnectionStates = currentStates
         }
