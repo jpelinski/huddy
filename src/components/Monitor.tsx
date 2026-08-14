@@ -16,7 +16,6 @@ export function Monitor() {
           style={{ color: `${isRunning ? "green" : "red"}` }}
           title="Process"
         >
-          BDO
           <MonitorCheckIcon size={14} />
         </span>
         <span className={styles.dot} data-active={isConnected} title="Connection">
