@@ -7,7 +7,7 @@
     "build:electron": "tsc -p tsconfig.electron.json",
     "dev:electron": "concurrently \"vite\" \"wait-on http://localhost:5173 && cross-env NODE_ENV=development electron .\"",
     "dev": "npm run build:electron && npm run dev:electron",
-    "build": "npm run build:electron && vite build && electron-builder --publish never",
+    "build": "npm run build:electron && vite build && electron-builder",
     "preview": "vite preview",
     "test": "vitest"
   },

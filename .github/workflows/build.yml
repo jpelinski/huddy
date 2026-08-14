@@ -30,7 +30,7 @@ jobs:
       - run: npm install
       - name: Build (no publish)
         if: github.ref_type != 'tag'
-        run: npm run build
+        run: npm run build -- --publish never
       - name: Build and publish
         if: github.ref_type == 'tag'
         run: npm run build -- --publish always
