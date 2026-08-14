@@ -16,10 +16,10 @@ export function Monitor() {
           style={{ color: `${isRunning ? "green" : "red"}` }}
           title="Process"
         >
-          BDO <MonitorCheckIcon size={14} />
+          <MonitorCheckIcon size={14} />
         </span>
         <span className={styles.dot} data-active={isConnected} title="Connection">
-          NET <NetworkIcon size={14} color={isConnected ? "green" : "red"} />
+          <NetworkIcon size={14} color={isConnected ? "green" : "red"} />
         </span>
       </div>
     </div>
