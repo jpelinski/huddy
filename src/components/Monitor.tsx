@@ -1,11 +1,9 @@
 import { MonitorCheckIcon, NetworkIcon } from "lucide-react";
-import { useProcessMonitor } from "../hooks/useProcessMonitor";
-import { useUIStore } from "../store/UIStore";
 import styles from "./Monitor.module.css";
+import { useMonitorStore } from "../store/monitorStore";
 
 export function Monitor() {
-  const { monitoredProcess } = useUIStore();
-  const { isRunning, isConnected } = useProcessMonitor(monitoredProcess);
+  const { isRunning, isConnected } = useMonitorStore();
 
   return (
     <div>

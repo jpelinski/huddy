@@ -8,6 +8,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useUIStore } from "./store/UIStore";
 import { Clock } from "./components/Clock";
 import { Update } from "./components/Update";
+import { useProcessMonitor } from "./hooks/useProcessMonitor";
 
 function App() {
   const { addTimer, timers } = useTimerStore();
@@ -35,6 +36,7 @@ function App() {
   };
   const { clockVisible } = useUIStore();
 
+  useProcessMonitor();
   return (
     <div
       ref={containerRef}

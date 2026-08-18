@@ -1,23 +1,21 @@
-import { useEffect, useState } from "react";
-interface MonitorData {
-    isRunning: boolean
-    isConnected: boolean
-}
+import { useEffect } from "react";
+import { useMonitorStore } from "../store/monitorStore";
 
-export function useProcessMonitor(processName: string | null) {
-    const [data, setData] = useState<MonitorData>({ isRunning: false, isConnected: false })
+export function useProcessMonitor() {
+    const { processName } = useMonitorStore()
 
     useEffect(() => {
         if (!processName) return
+
         window.api.startMonitor(processName)
 
         const cleanup = window.api.onMonitorUpdate((update) => {
 
             if (update.type === 'process') {
-                setData((prev) => ({ ...prev, isRunning: update.isRunning }))
+                useMonitorStore.getState().setStatus(update.isRunning, useMonitorStore.getState().isConnected)
             }
             if (update.type === 'network') {
-                setData((prev) => ({ ...prev, isConnected: update.isConnected }))
+                useMonitorStore.getState().setStatus(useMonitorStore.getState().isRunning, update.isConnected)
             }
         })
 
@@ -26,5 +24,4 @@ export function useProcessMonitor(processName: string | null) {
             window.api.stopMonitor()
         }
     }, [processName])
-    return data
 }
