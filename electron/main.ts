@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, Tray, Menu, nativeImage } from "electron";
+import { app, BrowserWindow, ipcMain, Tray, Menu, nativeImage, screen } from "electron";
 import { autoUpdater } from "electron-updater";
 import path from "path";
 import Store from 'electron-store'
@@ -30,38 +30,72 @@ const writeLog = (data: unknown) => {
     }
 }
 
-let win: BrowserWindow | null = null;
+let menuWin: BrowserWindow | null = null;
+let panelWin: BrowserWindow | null = null;
 
-function createWindow() {
-    win = new BrowserWindow({
-        width: 300,
-        height: 200,
+function createMenuWindow() {
+    const { width: screenWidth } = screen.getPrimaryDisplay().workAreaSize
+
+    menuWin = new BrowserWindow({
+        width: 60,
+        height: 60,
+        x: Math.round(screenWidth / 2 - 30),
+        y: 20,
         frame: false,
         transparent: true,
         alwaysOnTop: true,
-        resizable: true,
-        skipTaskbar: false,
-        ...(process.platform === 'darwin' && {
-            vibrancy: 'hud',
-            visualEffectState: 'active',
-        }),
+        resizable: false,
+        skipTaskbar: true,
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),
             contextIsolation: true,
             nodeIntegration: false,
         },
     });
-    win.setAlwaysOnTop(true, 'screen-saver')
-    win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })
+    menuWin.loadURL(
+        !app.isPackaged
+            ? "http://localhost:5173/#/menu"
+            : `file://${path.join(__dirname, "../../dist/index.html")}#menu`
+    )
+    menuWin.setAlwaysOnTop(true, 'screen-saver')
+    menuWin.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })
+}
 
-    win.on('resize', () => win?.webContents.invalidate())
+function createPanelWindow() {
+    const { width: screenWidth } = screen.getPrimaryDisplay().workAreaSize;
 
-    if (!app.isPackaged) {
-        win.loadURL("http://localhost:5173");
-        // win.webContents.openDevTools()
-    } else {
-        win.loadFile(path.join(__dirname, "../../dist/index.html"));
-    }
+
+    panelWin = new BrowserWindow({
+        width: 300,
+        height: 200,
+        x: screenWidth - 320,
+        y: 20,
+        frame: false,
+        transparent: true,
+        alwaysOnTop: true,
+        resizable: true,
+        skipTaskbar: false,
+        // ...(process.platform === 'darwin' && {
+        //     vibrancy: 'hud',
+        //     visualEffectState: 'active',
+        // })
+        // ,
+        webPreferences: {
+            preload: path.join(__dirname, "preload.js"),
+            contextIsolation: true,
+            nodeIntegration: false,
+        },
+    });
+    panelWin.setAlwaysOnTop(true, 'screen-saver')
+    panelWin.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })
+
+    panelWin.on('resize', () => panelWin?.webContents.invalidate())
+
+    panelWin.loadURL(
+        !app.isPackaged
+            ? 'http://localhost:5173/#panel'
+            : `file://${path.join(__dirname, '../../dist/index.html')}#panel`
+    )
 }
 
 let tray: Tray | null = null
@@ -73,7 +107,7 @@ function createTray() {
 
     tray = new Tray(icon)
     const contextMenu = Menu.buildFromTemplate([
-        { label: 'Show', click: () => win?.show() },
+        { label: 'Show', click: () => panelWin?.show() },
         { type: 'separator' },
         { label: 'Quit', click: () => app.quit() },
     ])
@@ -85,7 +119,8 @@ function createTray() {
 
 
 app.whenReady().then(() => {
-    createWindow();
+    createMenuWindow()
+    createPanelWindow()
     createTray()
 })
 
@@ -96,23 +131,23 @@ app.on("window-all-closed", () => {
 });
 
 ipcMain.on('window-drag', (_event, delta: { x: number, y: number }) => {
-    if (!win) return
-    const [x, y] = win.getPosition()
-    win.setPosition(x + delta.x, y + delta.y)
+    if (!panelWin) return
+    const [x, y] = panelWin.getPosition()
+    panelWin.setPosition(x + delta.x, y + delta.y)
 });
 ipcMain.handle('window-close', () => {
-    if (win) {
-        win.close();
+    if (panelWin) {
+        panelWin.close();
     }
 });
 ipcMain.handle('window-minimize', () => {
-    win?.hide()
+    panelWin?.hide()
 });
 
 ipcMain.on('set-height', (_event, height: number) => {
-    if (!win) return
-    const [width] = win.getSize()
-    win.setSize(width, height)
+    if (!panelWin) return
+    const [width] = panelWin.getSize()
+    panelWin.setSize(width, height)
 })
 
 ipcMain.handle('store-get', (_event, key: string) => {
@@ -139,12 +174,12 @@ ipcMain.handle('start-monitor', async (_event, processName: string) => {
         const isRunning = Boolean(found)
         currentPid = found ? found.pid : null
 
-        win?.webContents.send('monitor-update', { type: 'process', isRunning })
+        panelWin?.webContents.send('monitor-update', { type: 'process', isRunning })
     }, 3000)
 
     networkInterval = setInterval(async () => {
         if (!currentPid) {
-            win?.webContents.send("monitor-update", { type: "network", isConnected: false })
+            panelWin?.webContents.send("monitor-update", { type: "network", isConnected: false })
             return
         }
         const connections = await si.networkConnections()
@@ -164,7 +199,7 @@ ipcMain.handle('start-monitor', async (_event, processName: string) => {
             lastConnectionStates = currentStates
         }
 
-        win?.webContents.send("monitor-update", { type: "network", isConnected })
+        panelWin?.webContents.send("monitor-update", { type: "network", isConnected })
 
     }, 1000)
 })
@@ -179,11 +214,11 @@ ipcMain.handle('stop-monitor', () => {
 })
 
 autoUpdater.on('update-available', () => {
-    win?.webContents.send('update-available')
+    panelWin?.webContents.send('update-available')
 })
 
 autoUpdater.on('update-downloaded', () => {
-    win?.webContents.send('update-downloaded')
+    panelWin?.webContents.send('update-downloaded')
 })
 
 autoUpdater.on('error', (err) => {
