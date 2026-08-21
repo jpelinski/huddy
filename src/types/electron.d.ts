@@ -3,6 +3,7 @@ export interface ElectronAPI {
     minimize: () => Promise<void>;
     close: () => Promise<void>;
     setHeight: (height: number) => void
+    menuSetSize: (width: number, height: number) => void
     storeGet: (key: string) => Promise<unknown>
     storeSet: (key: string, value: unknown) => Promise<void>
     startMonitor: (processName: string) => Promise<void>

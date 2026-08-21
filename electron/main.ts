@@ -39,6 +39,7 @@ function createMenuWindow() {
     menuWin = new BrowserWindow({
         width: 60,
         height: 60,
+        minWidth: 60,
         x: Math.round(screenWidth / 2 - 30),
         y: 20,
         frame: false,
@@ -148,6 +149,15 @@ ipcMain.on('set-height', (_event, height: number) => {
     if (!panelWin) return
     const [width] = panelWin.getSize()
     panelWin.setSize(width, height)
+})
+ipcMain.on('menu-set-size', (_event, width: number, height: number) => {
+    if (!menuWin) return
+    const [currentX, y] = menuWin.getPosition()
+    const currentWidth = menuWin.getSize()[0]
+    const centerX = currentX + Math.round(currentWidth / 2)
+    const newX = centerX - Math.round(width / 2)
+
+    menuWin.setBounds({ x: newX, y, width: Math.round(width), height: Math.round(height) })
 })
 
 ipcMain.handle('store-get', (_event, key: string) => {
