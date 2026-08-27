@@ -9,6 +9,7 @@ import { useUIStore } from "./store/UIStore";
 import { Clock } from "./components/Clock";
 import { Update } from "./components/Update";
 import { useProcessMonitor } from "./hooks/useProcessMonitor";
+import { useSharedUIState } from "./hooks/useSharedUIState";
 
 function App() {
   const { addTimer, timers } = useTimerStore();
@@ -34,7 +35,7 @@ function App() {
   const handleAddTimer = () => {
     addTimer({ name: "New Timer", duration: 300 });
   };
-  const { clockVisible } = useUIStore();
+  const { state } = useSharedUIState();
 
   useProcessMonitor();
   return (
@@ -58,7 +59,7 @@ function App() {
           </motion.div>
         )}
       </AnimatePresence>
-      {clockVisible && <Clock />}
+      {state.clockVisible && <Clock onAddTimer={handleAddTimer} />}
       <TimerList />
     </div>
   );

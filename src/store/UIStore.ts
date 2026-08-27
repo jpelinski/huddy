@@ -18,7 +18,7 @@ export const useUIStore = create<UIStore>((set) => ({
     setIsExpanded: (value: boolean) => set(() => ({ isExpanded: value })),
     openSettingsId: null,
     setOpenSettingsId: (id: string | null) => set(() => ({ openSettingsId: id })),
-    clockVisible: false,
+    clockVisible: true,
     setClockVisible: (value: boolean) => set(() => ({ clockVisible: value })),
     monitoredProcess: "BlackDesert64.exe",
     setMonitoredProcess: (name) => set({ monitoredProcess: name })

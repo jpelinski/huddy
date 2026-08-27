@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import styles from "./MenuApp.module.css";
+import { useSharedUIState } from "./hooks/useSharedUIState";
 
 export default function MenuApp() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
-
+  const { state, setUIState } = useSharedUIState();
   useEffect(() => {
     if (!wrapperRef.current) return;
     const observer = new ResizeObserver(() => {
@@ -22,8 +23,14 @@ export default function MenuApp() {
       </div>
       {menuOpen && (
         <div className={styles.menu}>
-          <div className={styles.menuItem}>Timer</div>
-          <div className={styles.menuItem}>Clock</div>
+          <div
+            onClick={() => {
+              setUIState({ ...state, clockVisible: !state.clockVisible });
+            }}
+            className={styles.menuItem}
+          >
+            Timers
+          </div>
           <div className={styles.menuItem}>Settings</div>
         </div>
       )}

@@ -5,6 +5,12 @@ import Store from 'electron-store'
 import si from 'systeminformation'
 import fs from 'fs'
 
+interface SharedUIState {
+    clockVisible: boolean
+    settingsOpen: boolean
+}
+
+
 autoUpdater.checkForUpdatesAndNotify()
 
 const store = new Store({ clearInvalidConfig: true })
@@ -76,11 +82,13 @@ function createPanelWindow() {
         alwaysOnTop: true,
         resizable: true,
         skipTaskbar: false,
-        // ...(process.platform === 'darwin' && {
-        //     vibrancy: 'hud',
-        //     visualEffectState: 'active',
-        // })
-        // ,
+        backgroundColor: '#00000000',
+
+        ...(process.platform === 'darwin' && {
+            vibrancy: 'hud',
+            visualEffectState: 'active',
+        })
+        ,
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),
             contextIsolation: true,
@@ -123,6 +131,13 @@ app.whenReady().then(() => {
     createMenuWindow()
     createPanelWindow()
     createTray()
+
+    menuWin?.webContents.on('did-finish-load', () => {
+        menuWin?.webContents.send('ui-state', uiState)
+    })
+    panelWin?.webContents.on('did-finish-load', () => {
+        panelWin?.webContents.send('ui-state', uiState)
+    })
 })
 
 app.on("window-all-closed", () => {
@@ -236,4 +251,17 @@ autoUpdater.on('error', (err) => {
 })
 ipcMain.on('install-update', () => {
     autoUpdater.quitAndInstall()
+})
+const savedUIState = store.get('uiState', { clockVisible: false, settingsOpen: false }) as SharedUIState
+
+const uiState: SharedUIState = { ...savedUIState }
+
+const broadcastUIState = () => {
+    store.set('uiState', uiState)
+    menuWin?.webContents.send('ui-state', uiState)
+    panelWin?.webContents.send('ui-state', uiState)
+}
+ipcMain.on('set-ui-state', (_event, patch: Partial<SharedUIState>) => {
+    Object.assign(uiState, patch)
+    broadcastUIState()
 })

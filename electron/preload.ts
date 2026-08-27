@@ -23,4 +23,9 @@ contextBridge.exposeInMainWorld('api', {
         return () => ipcRenderer.removeAllListeners('update-downloaded')
     },
     installUpdate: () => ipcRenderer.send('install-update'),
+    setUIState: (patch: Record<string, unknown>) => ipcRenderer.send('set-ui-state', patch),
+    onUIState: (callback: (state: Record<string, unknown>) => void) => {
+        ipcRenderer.on('ui-state', (_event, state) => callback(state))
+        return () => ipcRenderer.removeAllListeners('ui-state')
+    }
 })

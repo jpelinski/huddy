@@ -1,8 +1,27 @@
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.leftButtons {
+  display: flex;
+  flex-direction: row;
+}
+.rightButtons {
+  display: flex;
+  flex-direction: row;
+}
+.buttton {
+  display: flex;
+}
 .clock {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 0.5rem;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 .time {
@@ -11,24 +30,4 @@
   font-weight: 500;
   color: var(--text-primary);
   letter-spacing: 0.05rem;
-}
-.indicators {
-  display: flex;
-  gap: 3px;
-  align-items: center;
-}
-
-.dot {
-  display: block;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--danger);
-}
-
-.dot[data-active="true"] {
-  background: blue;
-}
-.dot[data-active="false"] {
-  background: red;
 }

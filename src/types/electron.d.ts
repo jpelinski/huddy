@@ -1,3 +1,5 @@
+import type { SharedUIState } from "./uiState";
+
 export interface ElectronAPI {
     drag: (delta: { x: number; y: number }) => void;
     minimize: () => Promise<void>;
@@ -12,6 +14,8 @@ export interface ElectronAPI {
     onUpdateAvailable: (callback: () => void) => () => void
     onUpdateDownloaded: (callback: () => void) => () => void
     installUpdate: () => void
+    setUIState: (patch: Partial<SharedUIState>) => void
+    onUIState: (callback: (state: SharedUIState) => void) => () => void
 }
 declare global {
     interface Window {

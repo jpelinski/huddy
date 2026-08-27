@@ -1,6 +1,7 @@
 .headbar {
   display: flex;
-  align-items: center;
+  align-items: space-between;
+  justify-content: space-between;
   width: 100%;
   height: auto;
 }
@@ -12,6 +13,11 @@
 .headbar__underbar {
   display: flex;
   flex-direction: row;
+}
+.headbar__buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 0.2rem;
 }
 .headbarWrapper {
   display: flex;
