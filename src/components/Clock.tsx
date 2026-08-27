@@ -1,9 +1,8 @@
 import { useClock } from "../hooks/useClock";
 import styles from "./Clock.module.css";
 import btnStyles from "../styles/buttons.module.css";
-import { Plus, FolderBookmark, LucideClock, Settings } from "lucide-react";
+import { Plus, FolderBookmark, Settings } from "lucide-react";
 import { useState } from "react";
-import { useUIStore } from "../store/UIStore";
 
 interface Props {
   onAddTimer: () => void;
