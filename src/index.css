@@ -15,6 +15,9 @@
   --radius: 12px;
   --font-mono: "SF Mono", "Monaco", "Consolas", monospace;
 }
+::-webkit-scrollbar {
+  display: none;
+}
 body {
   background: transparent;
   color: var(--text-primary);

@@ -4,6 +4,7 @@
   align-items: center;
   width: fit-content;
   min-width: 60px;
+  overflow: hidden;
 }
 
 .icon {
@@ -20,6 +21,8 @@
   cursor: pointer;
   border: 1px solid rgba(255, 255, 255, 0.2);
   transition: background 0.15s;
+  overflow: hidden;
+  margin-bottom: 4px;
 }
 .icon:hover {
   background: rgba(255, 255, 255, 0.2);
@@ -31,8 +34,8 @@
   border: 1px solid rgba(255, 255, 255, 0, 1);
   border-radius: 8px;
   overflow: hidden;
-  margin-top: 4px;
-  min-width: 120px;
+  margin-top: 0px;
+  min-width: 60px;
 }
 .menuItem {
   padding: 4px 8px;
@@ -42,19 +45,17 @@
   color: vaar(--text-primary);
   background: transparent;
   border: none;
-  cursor: pointer;
+  cursor: default;
   text-align: left;
   transition: background 0.15s;
 }
 
 .menuItem:hover {
-  text-transform: uppercase;
-  letter-spacing: 0.05rem;
   color: black;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  text-align: left;
   transition: background 0.15s;
+  background: rgba(255, 255, 255, 0.8);
+}
+.menuItem[data-active="true"] {
+  color: rgb(1, 6, 170);
   background: rgba(255, 255, 255, 0.8);
 }

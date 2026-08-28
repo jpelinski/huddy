@@ -174,6 +174,11 @@ ipcMain.on('menu-set-size', (_event, width: number, height: number) => {
 
     menuWin.setBounds({ x: newX, y, width: Math.round(width), height: Math.round(height) })
 })
+// ipcMain.handle('menu-set-size', (_event, width: number, height: number) => {
+//     if (!menuWin) return
+//     const [x, y] = menuWin.getPosition()
+//     menuWin.setBounds({ x, y, width: Math.round(width), height: Math.round(height) })
+// })
 
 ipcMain.handle('store-get', (_event, key: string) => {
     return store.get(key)
